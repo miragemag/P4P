@@ -11,7 +11,7 @@ import java.util.ArrayList;
  * @author Amine
  */
 public class LesParties {
-    private ArrayList<Partie> lstp;
+    private ArrayList<Partie>lstp;
     
     public LesParties(){
         this.lstp = new ArrayList<>();
@@ -32,7 +32,7 @@ public class LesParties {
     public LesParties rechPartie(String p){
         LesParties lp = new LesParties();
         for(int i = 0;i<lstp.size();i++){
-            if(lstp.get(i).getJ1().equals(p)||getPartie(i).getJ2().equals(p)){
+            if(lstp.get(i).getJ1().getPseudo().equals(p)||lstp.get(i).getJ2().getPseudo().equals(p)){
                 lp.ajoutePartie(lstp.get(i));
             }
         }return lp; 

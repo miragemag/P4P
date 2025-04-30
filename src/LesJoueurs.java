@@ -1,7 +1,6 @@
 
 import java.util.ArrayList;
 import javax.swing.ImageIcon;
-import java.util.*;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
@@ -14,8 +13,9 @@ import java.util.*;
  */
 public class LesJoueurs {
     private ArrayList<Joueur>lstj;
+    
     public LesJoueurs(){
-        this.lstj=new ArrayList<Joueur>();
+        this.lstj=new ArrayList<>();
     }
     public Joueur getJoueur(int i){
         return lstj.get(i);
@@ -61,8 +61,7 @@ public class LesJoueurs {
             this.lstj.remove(ind);
         }
     }
-public void creationJoueursTest(LesParties lp)
- { // creation de 6 joueurs et des parties
+public void creationJoueursTest(LesParties lp){ // creation de 6 joueurs et des parties
  Joueur j ;
  Joueur jd= new Joueur("Darwin"); // expert
  jd.setPhoto(new ImageIcon(getClass().getResource("/Img/Darwin.png")));
@@ -122,7 +121,6 @@ public void creationJoueursTest(LesParties lp)
  this.ajouterJoueur(jf);
  this.ajouterJoueur(jj);
  this.ajouterJoueur(jh);
- this.ajouterJoueur(jc);
  }
     @Override
     public String toString(){

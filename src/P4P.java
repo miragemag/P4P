@@ -14,9 +14,6 @@ import javax.swing.*;
  */
 public class P4P extends javax.swing.JFrame {
 
-    /**
-     * Creates new form P4P
-     */
     private LesJoueurs lstj;
     private Joueur joueur1;
     private Joueur joueur2;
@@ -35,15 +32,13 @@ public class P4P extends javax.swing.JFrame {
     private int compt;
     private boolean selection; 
     private boolean finPartie;
-    private int nbgj1; 
-    private int nbgj2;
     
     
     public P4P() {
         initComponents();
         this.lstj = new LesJoueurs();
-        this.lstj.creationJoueursTest(this.lp);
         this.lp=new LesParties();
+        this.lstj.creationJoueursTest(this.lp);
         this.joueur1=this.lstj.getJoueur(0);
         this.joueur2=this.lstj.getJoueur(1);
         this.lejeu= new Jeu();
@@ -59,6 +54,14 @@ public class P4P extends javax.swing.JFrame {
         this.selection=false;
         this.finPartie=false;
         Message.setText("C'est au joueur 1 de jouer");
+    }
+    public void afficheJoueurs(){
+        this.PseudoJ1.setText(this.joueur1.getPseudo());
+        this.PseudoJ2.setText(this.joueur2.getPseudo());
+        this.PpJoueur1.setIcon(joueur1.getPhoto());
+        this.PpJoueur2.setIcon(joueur2.getPhoto());
+        jPanel3.setBackground(Color.red);
+        jPanel4.setBackground(new Color(101,52,0));
     }
     private void initPanneau() {
         for(int i=0;i<16;i++){
@@ -113,7 +116,7 @@ public class P4P extends javax.swing.JFrame {
                 }
         }else{ 
             if (this.nbPionsDepot !=0){ // s'il reste des pions à poser
-                this.xa=x; this.ya=y; // (xa, ya) est la position choisie pour déposer (clic sur cette case par le joueur)
+                this.xa=this.getX(); this.ya=this.getY(); // (xa, ya) est la position choisie pour déposer (clic sur cette case par le joueur)
                 int val=this.caseCourante.getValCase(0); // récupération de la valeur du pion à déposer
                 int code;
                 code = this.lejeu.jouePion(pxd, pyd, xd, yd, xa, ya,val); // A COMMENTER
@@ -124,8 +127,8 @@ public class P4P extends javax.swing.JFrame {
                 affichePanneau(); afficheCaseCourante(); // on réaffiche le jeu plateau et les galets à déposer
                     if (this.nbPionsDepot ==0){ // s'il n'y a plus de pions
                         traiteFinTour(); // on traite la fin du tour (changement de joueur ou fin de partie)
-                    }else this.MessageErreur.setText("Mouvement Impossible");
-                }
+                    }
+                }else this.MessageErreur.setText("Mouvement Impossible");
             }
         }
     }
@@ -150,13 +153,7 @@ public class P4P extends javax.swing.JFrame {
             this.jGalets.validate();
             this.jGalets.repaint();
             this.setSize(800, 600);
-            this.setLocation(200, 200);
- }
-    public void afficheJoueurs(){
-        this.PseudoJ1.setText(this.joueur1.getPseudo());
-        this.PseudoJ2.setText(this.joueur2.getPseudo());
-        this.PpJoueur1.setIcon(joueur1.getPhoto());
-        this.PpJoueur2.setIcon(joueur2.getPhoto());
+            this.setLocationRelativeTo(null);
     }
     private void affichePanneau(){
         for(int i= 0;i<4;i++){
@@ -262,9 +259,12 @@ public class P4P extends javax.swing.JFrame {
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenuJeu = new javax.swing.JMenu();
         jMenuJoueurs = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
+        bVisualier = new javax.swing.JMenuItem();
+        bAjouter = new javax.swing.JMenuItem();
+        bSelectionner = new javax.swing.JMenuItem();
         jMenuStat = new javax.swing.JMenu();
         jMenuItemScore = new javax.swing.JMenuItem();
+        bClassement = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -277,8 +277,6 @@ public class P4P extends javax.swing.JFrame {
         jLabelJoueur1.setToolTipText("");
         jPanel1.add(jLabelJoueur1);
         jPanel1.add(PseudoJ1);
-
-        jPanel3.setBackground(new java.awt.Color(255, 0, 0));
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -303,8 +301,6 @@ public class P4P extends javax.swing.JFrame {
         jLabelJoueur2.setText("Joueur 2 :");
         jPanel2.add(jLabelJoueur2);
         jPanel2.add(PseudoJ2);
-
-        jPanel4.setBackground(new java.awt.Color(101, 52, 0));
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -357,13 +353,29 @@ public class P4P extends javax.swing.JFrame {
             }
         });
 
-        jMenuItem1.setText("Visualiser");
-        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+        bVisualier.setText("Visualiser");
+        bVisualier.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem1ActionPerformed(evt);
+                bVisualierActionPerformed(evt);
             }
         });
-        jMenuJoueurs.add(jMenuItem1);
+        jMenuJoueurs.add(bVisualier);
+
+        bAjouter.setText("Ajouter");
+        bAjouter.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bAjouterActionPerformed(evt);
+            }
+        });
+        jMenuJoueurs.add(bAjouter);
+
+        bSelectionner.setText("Sélectionner");
+        bSelectionner.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bSelectionnerActionPerformed(evt);
+            }
+        });
+        jMenuJoueurs.add(bSelectionner);
 
         jMenuBar1.add(jMenuJoueurs);
 
@@ -371,6 +383,14 @@ public class P4P extends javax.swing.JFrame {
 
         jMenuItemScore.setText("Scores");
         jMenuStat.add(jMenuItemScore);
+
+        bClassement.setText("Classement");
+        bClassement.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bClassementActionPerformed(evt);
+            }
+        });
+        jMenuStat.add(bClassement);
 
         jMenuBar1.add(jMenuStat);
 
@@ -383,11 +403,43 @@ public class P4P extends javax.swing.JFrame {
 
     }//GEN-LAST:event_jMenuJoueursActionPerformed
 
-    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+    private void bVisualierActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bVisualierActionPerformed
         VisuJoueurDlg diag= new VisuJoueurDlg(this,true,this.lstj);
             diag.setSize(800, 600);
             diag.setVisible(true);
-    }//GEN-LAST:event_jMenuItem1ActionPerformed
+            this.setLocationRelativeTo(null);
+    }//GEN-LAST:event_bVisualierActionPerformed
+
+    private void bClassementActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bClassementActionPerformed
+        // TODO add your handling code here:
+        Classement diag = new Classement(this,true,this.lstj,this.lp);
+        this.setLocationRelativeTo(null);
+        diag.setSize(800, 600);
+        diag.setVisible(true);
+    }//GEN-LAST:event_bClassementActionPerformed
+
+    private void bAjouterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bAjouterActionPerformed
+        // TODO add your handling code here:
+        SaisieJoueurDlg ajoutJ = new SaisieJoueurDlg(this,true);
+        ajoutJ.setSize(800, 600);
+        ajoutJ.setVisible(true);
+        if(ajoutJ.getOk())
+            this.lstj.ajouterJoueur(ajoutJ.getJoueur());
+    }//GEN-LAST:event_bAjouterActionPerformed
+
+    private void bSelectionnerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bSelectionnerActionPerformed
+        // TODO add your handling code here:
+        SelectionJoueursDlg diag = new SelectionJoueursDlg(this, true, this.lstj);
+        diag.setSize(800, 600);
+        diag.setVisible(true);
+        if(diag.getOk())
+        {
+            // on a valider ,  on récupère les joueurs
+            this.joueur1= diag.getJoueur1();
+            this.joueur2= diag.getJoueur2();
+            afficheJoueurs();
+        }
+    }//GEN-LAST:event_bSelectionnerActionPerformed
 
     /**
      * @param args the command line arguments
@@ -431,6 +483,10 @@ public class P4P extends javax.swing.JFrame {
     private javax.swing.JButton PpJoueur2;
     private javax.swing.JLabel PseudoJ1;
     private javax.swing.JLabel PseudoJ2;
+    private javax.swing.JMenuItem bAjouter;
+    private javax.swing.JMenuItem bClassement;
+    private javax.swing.JMenuItem bSelectionner;
+    private javax.swing.JMenuItem bVisualier;
     private javax.swing.JPanel jCenter;
     private javax.swing.JPanel jEast;
     private javax.swing.JButton jGalets;
@@ -439,7 +495,6 @@ public class P4P extends javax.swing.JFrame {
     private javax.swing.JLabel jLabelMessage;
     private javax.swing.JLabel jLabelText;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItemScore;
     private javax.swing.JMenu jMenuJeu;
     private javax.swing.JMenu jMenuJoueurs;
