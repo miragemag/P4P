@@ -69,6 +69,7 @@ public class Jeu {
         }
     return gain;
     }
+    
     public boolean adjacent(int xd,int yd,int xa,int ya){
         return (xa==xd-1 && ya==yd)||(xa==xd+1 && ya==yd)||(xa==xd && ya==yd-1)||(xa==xd && ya==yd+1);
     }

@@ -15,7 +15,7 @@ public class Partie {
     
     public Partie(Joueur j1, Joueur j2, int nbCoups, int res){
         this.j1 = j1;
-        this.j1 = j2;
+        this.j2 = j2;
         this.nbCoups = nbCoups;
         this.res = res;
     }

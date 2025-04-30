@@ -91,7 +91,7 @@ public class P4P extends javax.swing.JFrame {
             int y=num-x*4;
             MessageErreur.setText(""); // JLabel nommé MessageErreur à côté de la zone Message
             // pour afficher des messages d'erreurs pendant le jeu
-            if (this.selection==false){ // C'est le début d'un tour de jeu
+            if (this.selection==true){ // C'est le début d'un tour de jeu
                 if (PJeu.getCase(x, y).estVide())
                 this.MessageErreur.setText("Case vide !");
                 // Il est interdit de déposer un pion sur une case vide
@@ -141,19 +141,20 @@ public class P4P extends javax.swing.JFrame {
                 for (int k=0; k<nbPions; k++){
                     JButton panPion = new JButton();
                         switch(this.caseCourante.getValCase(k)){
-                            case -1 : panPion.setBackground(new Color(227,198,109));break;
                             case 0 : panPion.setBackground(Color.ORANGE);break;
                             case 1 : panPion.setBackground(Color.RED);break;
                             case 2 : panPion.setBackground(new Color(123,40,0));break;
                         }
                     jGalets.add(panPion);
                 }
-            }else jGalets.removeAll();
+            }else {
+            jGalets.removeAll();
             this.pack();
             this.jGalets.validate();
             this.jGalets.repaint();
             this.setSize(800, 600);
             this.setLocationRelativeTo(null);
+           }
     }
     private void affichePanneau(){
         for(int i= 0;i<4;i++){
@@ -258,6 +259,8 @@ public class P4P extends javax.swing.JFrame {
         MessageErreur = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenuJeu = new javax.swing.JMenu();
+        BRejouer = new javax.swing.JMenuItem();
+        BQuitter = new javax.swing.JMenuItem();
         jMenuJoueurs = new javax.swing.JMenu();
         bVisualier = new javax.swing.JMenuItem();
         bAjouter = new javax.swing.JMenuItem();
@@ -344,6 +347,23 @@ public class P4P extends javax.swing.JFrame {
         getContentPane().add(jSouth, java.awt.BorderLayout.SOUTH);
 
         jMenuJeu.setText("Jeu");
+
+        BRejouer.setText("Rejouer");
+        BRejouer.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BRejouerActionPerformed(evt);
+            }
+        });
+        jMenuJeu.add(BRejouer);
+
+        BQuitter.setText("Quitter");
+        BQuitter.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BQuitterActionPerformed(evt);
+            }
+        });
+        jMenuJeu.add(BQuitter);
+
         jMenuBar1.add(jMenuJeu);
 
         jMenuJoueurs.setText("Joueurs");
@@ -432,14 +452,22 @@ public class P4P extends javax.swing.JFrame {
         SelectionJoueursDlg diag = new SelectionJoueursDlg(this, true, this.lstj);
         diag.setSize(800, 600);
         diag.setVisible(true);
-        if(diag.getOk())
-        {
+        if(diag.getOk()){
             // on a valider ,  on récupère les joueurs
             this.joueur1= diag.getJoueur1();
             this.joueur2= diag.getJoueur2();
             afficheJoueurs();
         }
     }//GEN-LAST:event_bSelectionnerActionPerformed
+
+    private void BQuitterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BQuitterActionPerformed
+        // TODO add your handling code here:
+        System.exit(0);
+    }//GEN-LAST:event_BQuitterActionPerformed
+
+    private void BRejouerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BRejouerActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_BRejouerActionPerformed
 
     /**
      * @param args the command line arguments
@@ -477,6 +505,8 @@ public class P4P extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenuItem BQuitter;
+    private javax.swing.JMenuItem BRejouer;
     private javax.swing.JTextField Message;
     private javax.swing.JLabel MessageErreur;
     private javax.swing.JButton PpJoueur1;

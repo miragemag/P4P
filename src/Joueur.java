@@ -109,7 +109,7 @@ public class Joueur {
            this.adversaires.add(j);
            this.resultats.add(res);
            if(res == 1){
-               if(this.niveau!=10){
+               if(this.niveau<10){
                    this.niveau+=1;
                }
            }
