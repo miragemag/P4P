@@ -71,7 +71,7 @@ public class Classement extends javax.swing.JDialog {
         int largRect = largeurMax/nbJo;
         int hautMax = this.PanHisto.getHeight()/2;
         for(int i=0;i<nbJo;i++){
-            Joueur j = this.lesJo.getJoueur(i);
+            Joueur j = this.lesJo.getJoueur(tabC[i]);
             int nbPartG = j.getNbpartiesGagnees();
             int hautRectJ;
             if(nbPartG==0){

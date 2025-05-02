@@ -19,7 +19,9 @@ public class Case {
     public int getValCase(int i){
         if((!estVide())&&i>=0&&i<this.pions.size()){
             return this.pions.get(i);
-        }else return -1;
+        }else{
+            return -1;
+        }
     }
     public int getNbPions(){
         return pions.size();

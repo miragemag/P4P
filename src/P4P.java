@@ -84,77 +84,80 @@ public class P4P extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);// centrer l'interface
     }
     private void traitementActionPerformed(java.awt.event.ActionEvent evt){
-        if (!finPartie){ 
-            JButton jb= (JButton) evt.getSource();
-            int num= Integer.parseInt(jb.getName());
-            int x= num/4;
-            int y=num-x*4;
-            MessageErreur.setText(""); // JLabel nommé MessageErreur à côté de la zone Message
-            // pour afficher des messages d'erreurs pendant le jeu
-            if (this.selection==true){ // C'est le début d'un tour de jeu
-                if (PJeu.getCase(x, y).estVide())
-                this.MessageErreur.setText("Case vide !");
-                // Il est interdit de déposer un pion sur une case vide
-            }else{ 
-                this.compt++;
-                selection=true; // indicateur pour indiquer qu'on est au cours d'un tour de jeu (phase d'égrainage)
-                this.xsel=x; this.ysel=y; // position initiale cliquée (xsel,ysel) pour le dépôt du pion du joueur
-                this.xd=x; this.yd=y; // position de dépôt du galet (ici position initiale)
-                this.pxd=-1; this.pyd=-1; // position précédente du dernier dépôt (ici pas de précédent)
-
-                this.PJeu.deposePionCase(JoueurCourant, xsel, ysel); // A COMMENTER
-                // on duplique la case sélectionnée dans la case courante
-                this.caseCourante= new Case();
-                for (int i=0; i<this.PJeu.getCase(xsel, ysel).getNbPions(); i++)
-                    this.caseCourante.empilePion(this.PJeu.getCase(xsel, ysel).getValCase(i));
-                    this.nbPionsDepot=this.caseCourante.getNbPions();
-                    // nombre de pions sur cette case sélectionnée (y compris le pion que l'on vient de déposer)
-                    affichePanneau(); // affichage du panneau avec ce pion
-                    afficheCaseCourante();
-                    //affichage en partie droite de la pile des galets qui seront à déposer (pour plus de facilité pour jouer)
-                    this.PJeu.getCase(xsel,ysel).videCase(); // A COMMENTER
+        if(!finPartie){
+            JButton jb = (JButton) evt.getSource(); // Récupére le bouton cliqué
+            int num = Integer.parseInt(jb.getName());
+            int x = num/4;
+            int y = num-x*4;
+            MessageErreur.setText(""); // JLabel nommé MessageErreur à côté de la zone de Message pour afficher des messages d'erreurs pendant le jeu
+            if(this.selection == false){
+                if(PJeu.getCase(x, y).estVide()){
+                    this.MessageErreur.setText("Case Vide !"); // Il est interdit de déposer un pion sur une case vide
                 }
-        }else{ 
-            if (this.nbPionsDepot !=0){ // s'il reste des pions à poser
-                this.xa=this.getX(); this.ya=this.getY(); // (xa, ya) est la position choisie pour déposer (clic sur cette case par le joueur)
-                int val=this.caseCourante.getValCase(0); // récupération de la valeur du pion à déposer
-                int code;
-                code = this.lejeu.jouePion(pxd, pyd, xd, yd, xa, ya,val); // A COMMENTER
-                if (code ==0 ){ // le pion a été déposé sur une case correcte (adjacente sans retour arrière)
-                this.nbPionsDepot--; // on décrémente le nombre de pions à déposer
-                this.caseCourante.defilePion(); // on supprime ce pion de la case initiale
-                pxd=xd; pyd=yd; xd=xa; yd=ya; // on remet à jour les positions
-                affichePanneau(); afficheCaseCourante(); // on réaffiche le jeu plateau et les galets à déposer
-                    if (this.nbPionsDepot ==0){ // s'il n'y a plus de pions
-                        traiteFinTour(); // on traite la fin du tour (changement de joueur ou fin de partie)
+                else{
+                    this.compt++;
+                    selection = true; //indicateur pour indiquer qu'on est est au cours d'un tour de jeu (phase d'engrainage)
+                    this.xsel = x; this.ysel = y; // position initiale cliquée pour le dépôt du pion du joueur
+                    this.xd = x; this.yd = y; // position de dépôt du galets (ici position initiale)
+                    this.pxd = -1; this.pyd = -1; // position précédente du dernier dépôt (ici pas de précédent)
+                    this.PJeu.deposePionCase(JoueurCourant, xsel, ysel); // ajoute la valeur du joueur courant dans la liste des pions de la case
+                    // on duplique la case sélectionnée dans la case courante
+                    this.caseCourante = new Case();
+                    for(int i=0; i<this.PJeu.getCase(xsel, ysel).getNbPions(); i++){
+                        this.caseCourante.empilePion(this.PJeu.getCase(xsel, ysel).getValCase(i));
                     }
-                }else this.MessageErreur.setText("Mouvement Impossible");
+                    this.nbPionsDepot = this.caseCourante.getNbPions(); // nombre de pions sur cette case sélectionnée (y compris le pion que l'on vient de déposer)
+                    affichePanneau(); // affichage du panneau avec ce pion
+                    afficheCaseCourante(); // affichage en partie droite de la pile des des galets qui seront à déposer (pour plus de facilité pour jouer)
+                    this.PJeu.getCase(xsel, ysel).videCase(); // vide la case où on a déposé le nouveau pion, pour ensuite régrainer les pions              
+                }
+            }
+            else{
+                if(this.nbPionsDepot != 0){ // s'il reste des pions à poser
+                    int xa = x; int ya = y; // (xa , ya) est la position choisie pour déposer (clic sur cette case par le joueur)
+                    int val = this.caseCourante.getValCase(0); // récupération de la valeur du pion à déposer
+                    int code;
+                    code = this.lejeu.jouePion(pxd, pyd, xd, yd, xa, ya, val); // (pxd, pyd) position précédente du dépot d'un pion (xd, yd) position du pion que l'on à déposé (xa, ya) position futur pour dépot
+                    if(code == 0){ // le pion à été déposé sur une case correcte (adjacente sans retour arrière)
+                        this.nbPionsDepot--; // on décrémente le nombre de pions à déposer
+                        this.caseCourante.defilePion(); // on supprime ce pion de la case initiale
+                        pxd = xd; pyd = yd; xd = xa; yd = ya; // on remet à jour les positions
+                        affichePanneau(); afficheCaseCourante(); // on réaffiche le jeu plateau et les galets à déposer
+                        if(this.nbPionsDepot == 0){ // s'il n y a plus de pions
+                            traiteFinTour(); // on traite la fin du tour (changement de joueur ou fin de partie)
+                        }
+                    }
+                    else{
+                        this.MessageErreur.setText("Mouvement impossible"); // il n'est pas sur une case correcte donc on affiche un message d'erreur
+                    }
+                }
             }
         }
     }
     private void afficheCaseCourante(){ // case panel droite pile de galets
-           if (this.caseCourante != null){ 
+           if (this.caseCourante != null && this.nbPionsDepot>0){ 
                jGalets.removeAll();
                 //int nbPions=this.caseCourante.getNbPions();
                 int nbPions=this.nbPionsDepot;
-                jGalets.setLayout(new GridLayout(nbPions,1));
-                for (int k=0; k<nbPions; k++){
+                jGalets.setLayout(new GridLayout(nbPionsDepot,1));
+                for (int k=0; k<nbPionsDepot; k++){
                     JButton panPion = new JButton();
-                        switch(this.caseCourante.getValCase(k)){
+                    int v = this.caseCourante.getValCase(k);
+                        switch(v){
                             case 0 : panPion.setBackground(Color.ORANGE);break;
                             case 1 : panPion.setBackground(Color.RED);break;
-                            case 2 : panPion.setBackground(new Color(123,40,0));break;
+                            case 2 : panPion.setBackground(new Color(101,52,0));break;
                         }
                     jGalets.add(panPion);
                 }
             }else {
             jGalets.removeAll();
+            }
             this.pack();
-            this.jGalets.validate();
+            this.jGalets.revalidate();
             this.jGalets.repaint();
             this.setSize(800, 600);
             this.setLocationRelativeTo(null);
-           }
     }
     private void affichePanneau(){
         for(int i= 0;i<4;i++){
@@ -163,43 +166,35 @@ public class P4P extends javax.swing.JFrame {
                 JPanel pan= (JPanel) this.jCenter.getComponent(num);
                 JButton BH = (JButton) pan.getComponent(0);
                 int val = this.PJeu.getSommetCase(i,j);
-                if(val==-1)
-                    BH.setBackground(new Color(227,198,109));
-                else if(val==0){
-                    BH.setBackground(Color.ORANGE);
-                 }
-                 else if(val==1){
-                    BH.setBackground(Color.RED);
-                 }
-                 else if(i==2) {
-                     BH.setBackground(new Color(101,52,0));
-                 }
-                /*switch(val){
+                switch(val){
                     case -1 : BH.setBackground(new Color(227,198,109));break;
                     case 0 : BH.setBackground(Color.ORANGE);break;
                     case 1 : BH.setBackground(Color.RED);break;
                     case 2 : BH.setBackground(new Color(101,52,0));break;
-                }*/
+                }
                 JPanel PB = (JPanel) pan.getComponent(1);
                 PB.setBackground(new Color(227,198,109));
                 PB.removeAll();
                 Case c = this.PJeu.getCase(i,j);
                 int nbPions = c.getNbPions();
-                PB.setLayout(new GridLayout(1,nbPions));
-                for(int x=0;x<nbPions-2;x++){
-                    JButton btPion = new JButton();
-                    int valeur = c.getValCase(x);
-                    switch(valeur){
-                        case 0 : btPion.setBackground(Color.ORANGE);break;
-                        case 1 : btPion.setBackground(Color.RED);break;
-                        case 2 : btPion.setBackground(new Color(101,52,0));break;
-                    }
-                    PB.add(btPion);
+                if(nbPions>1){
+                    PB.setLayout(new GridLayout(1,nbPions-1));
+                    for(int x=0;x<nbPions-1;x++){
+                        JButton btPion = new JButton();
+                        int valeur = c.getValCase(x);
+                        switch(valeur){
+                         case 0 : btPion.setBackground(Color.ORANGE);break;
+                         case 1 : btPion.setBackground(Color.RED);break;
+                         case 2 : btPion.setBackground(new Color(101,52,0));break;
+                        }
+                        PB.add(btPion);
+                    }   
                 }
-                this.pack();
-                this.setSize(800,600);
+                
             }
         }
+        this.pack();
+        this.setSize(800,600);
     }
     private void traiteFinTour(){
         this.selection=false;
@@ -402,6 +397,11 @@ public class P4P extends javax.swing.JFrame {
         jMenuStat.setText("Statistiques");
 
         jMenuItemScore.setText("Scores");
+        jMenuItemScore.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemScoreActionPerformed(evt);
+            }
+        });
         jMenuStat.add(jMenuItemScore);
 
         bClassement.setText("Classement");
@@ -467,7 +467,16 @@ public class P4P extends javax.swing.JFrame {
 
     private void BRejouerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BRejouerActionPerformed
         // TODO add your handling code here:
+        dispose(); // Fermer la fenêtre actuelle
+        new P4P().setVisible(true); // Lancer une nouvelle fenêtre  
     }//GEN-LAST:event_BRejouerActionPerformed
+
+    private void jMenuItemScoreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemScoreActionPerformed
+        ScoresDlg diag = new ScoresDlg(this,true,this.lstj, this.lp);
+        diag.setSize(800,600);
+        diag.setTitle("Statistique des Scores");
+        diag.setVisible(true);
+    }//GEN-LAST:event_jMenuItemScoreActionPerformed
 
     /**
      * @param args the command line arguments
@@ -499,7 +508,11 @@ public class P4P extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new P4P().setVisible(true);
+                P4P screen = new P4P();
+                screen.setVisible(true);
+                screen.setSize(800,600);
+                screen.setTitle("Puissance 4 Plus");
+                screen.setVisible(true);
             }
         });
     }

@@ -70,6 +70,9 @@
               <Properties>
                 <Property name="text" type="java.lang.String" value="Scores"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemScoreActionPerformed"/>
+              </Events>
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="bClassement">
               <Properties>

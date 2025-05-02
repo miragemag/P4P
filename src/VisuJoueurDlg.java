@@ -1,7 +1,8 @@
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.JComboBox;
+import javax.swing.DefaultListModel;
+import javax.swing.JList;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
@@ -21,15 +22,14 @@ public class VisuJoueurDlg extends javax.swing.JDialog {
     public VisuJoueurDlg(java.awt.Frame parent, boolean modal, LesJoueurs llj) {
         super(parent, modal);
         initComponents();
-        this.lj = llj;
+        this.lj = new LesJoueurs();
+        initListeNiveaux();
         this.jcourant=this.lj.getJoueur(0);
         afficheJoueurCourant();//pour afficher les informations du joueur
-        /*initListeJoueurs();//pour remplir la liste déroulante avec des pseudos*/
         this.setSize(600, 400);
         this.setLocationRelativeTo(null);// centrer l'interface
     }
     private void afficheJoueurCourant() { // Méthode affiche toute les information du joueur dans les zones destinées
-        /*Niveau.setText(""+this.jcourant.getNiveau());*/
         BRecherche.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 String pseudo = RechPseudo.getText();
@@ -42,8 +42,20 @@ public class VisuJoueurDlg extends javax.swing.JDialog {
                     Edition.setText("Aucun joueur trouvé avec le pseudo \"" + pseudo + "\"");
                 }
             }
-        });
-        
+        });  
+    }
+    private void initListeNiveaux() {
+    // Vider la liste déroulante au cas où elle contiendrait déjà des éléments
+    ListeNiveaux.removeAllItems();
+    
+    // Ajouter les différents niveaux à la JComboBox
+    ListeNiveaux.addItem("Débutant");
+    ListeNiveaux.addItem("Intermédiaire");
+    ListeNiveaux.addItem("Avancé");
+    ListeNiveaux.addItem("Expert");
+    
+    // Sélectionner le premier élément par défaut
+    ListeNiveaux.setSelectedIndex(0);
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -91,6 +103,11 @@ public class VisuJoueurDlg extends javax.swing.JDialog {
         PActions.add(BRecherche);
 
         ListeNiveaux.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        ListeNiveaux.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ListeNiveauxActionPerformed(evt);
+            }
+        });
         PActions.add(ListeNiveaux);
 
         jEast.add(PActions);
@@ -121,8 +138,51 @@ public class VisuJoueurDlg extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void BAfficherActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BAfficherActionPerformed
-        // TODO add your handling code here:
+    // Créer un modèle de liste par défaut pour stocker les chaînes de caractères
+    DefaultListModel<String> model = new DefaultListModel<>();
+    
+    // Parcourir tous les joueurs et les ajouter au modèle
+    for (Joueur j : lj.getListeJoueurs()) {
+        model.addElement(j.toString()); // toString() retourne pseudo ou détails du joueur
+    }
+    
+    // Appliquer le modèle à la zone d'édition (JList)
+    Edition.setModel(model);
     }//GEN-LAST:event_BAfficherActionPerformed
+
+    private void ListeNiveauxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ListeNiveauxActionPerformed
+ // Récupérer le niveau sélectionné dans la liste déroulante
+    String niveauSelectionne = (String) ListeNiveaux.getSelectedItem();
+    
+    // Créer un modèle de liste pour stocker les joueurs filtrés
+    DefaultListModel<String> model = new DefaultListModel<>();
+    
+    // Convertir la chaîne de caractères en entier correspondant au niveau
+    int niveau = 0; // Par défaut, débutant
+    
+    switch(niveauSelectionne) {
+        case "Débutant":
+            niveau = 1;
+            break;
+        case "Intermédiaire":
+            niveau = 2;
+            break;
+        case "Avancé":
+            niveau = 3;
+            break;
+        case "Expert":
+            niveau = 4;
+            break;
+    }
+    
+    // Récupérer tous les joueurs du niveau sélectionné
+    for (Joueur j : lj.getJoueurs(niveau)) {
+        model.addElement(j.toString());
+    }
+    
+    // Appliquer le modèle à la zone d'édition
+    Edition.setModel(model);
+    }//GEN-LAST:event_ListeNiveauxActionPerformed
 
     /**
      * @param args the command line arguments

@@ -1,4 +1,3 @@
-
 import java.util.ArrayList;
 import javax.swing.ImageIcon;
 
@@ -61,7 +60,7 @@ public class LesJoueurs {
             this.lstj.remove(ind);
         }
     }
-public void creationJoueursTest(LesParties lp){ // creation de 6 joueurs et des parties
+public void creationJoueursTest(LesParties lp){ // creation de 5 joueurs et des parties
  Joueur j ;
  Joueur jd= new Joueur("Darwin"); // expert
  jd.setPhoto(new ImageIcon(getClass().getResource("/Img/Darwin.png")));
